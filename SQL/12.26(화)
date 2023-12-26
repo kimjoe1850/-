@@ -1,0 +1,109 @@
+# 12.26 코딩테스트 문풀
+
+
+1. 조건에 맞는 도서 리스트 출력하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/144853
+내가 쓴 답
+SELECT BOOK_ID, date_format(PUBLISHED_DATE,"%Y-%m-%d") PUBLISHED_DATE
+from BOOK
+where date_format(PUBLISHED_DATE, "%Y") = '2021' and CATEGORY = '인문'
+order by PUBLISHED_DATE
+
+
+2. 평균 일일 대여 요금 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/151136
+내가 쓴 답
+SELECT round(avg(DAILY_FEE)) AVERAGE_FEE
+from CAR_RENTAL_COMPANY_CAR
+where CAR_TYPE = 'SUV'
+
+
+3. 조건에 맞는 사용자와 총 거래금액 조회하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/164668
+내가 쓴 답
+SELECT USER_ID, NICKNAME, sum(PRICE) TOTAL_SALES
+from USED_GOODS_BOARD ub left join USED_GOODS_USER uu on ub.WRITER_ID = uu.USER_ID
+where STATUS = 'DONE'
+group by uu.USER_ID, uu.NICKNAME
+having TOTAL_SALES >=700000
+order by TOTAL_SALES
+
+
+4.가격대 별 상품 개수 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/131530
+내가 쓴 답
+SELECT case when PRICE < 10000 then "0"
+            when PRICE < 20000 then "10000"
+            when PRICE < 30000 then "20000"
+            when PRICE < 40000 then "30000"
+            when PRICE < 50000 then "40000"
+            when PRICE < 60000 then "50000"
+            when PRICE < 70000 then "60000"
+            when PRICE < 80000 then "70000"
+            when PRICE < 90000 then "80000"
+            when PRICE < 100000 then "90000"
+        end as PRICE_GROUP,
+        count(PRODUCT_ID) as PRODUCTS
+from PRODUCT
+group by PRICE_GROUP
+order by PRICE_GROUP
+
+
+5. 3월에 태어난 여성 회원 목록 출력하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/131120
+내가 쓴 답
+SELECT MEMBER_ID,MEMBER_NAME,GENDER,DATE_FORMAT(DATE_OF_BIRTH, "%Y-%m-%d") AS DATE_OF_BIRTH
+FROM MEMBER_PROFILE
+WHERE TLNO IS NOT NULL AND MONTH(DATE_OF_BIRTH) = '3' AND GENDER = 'W'
+ORDER BY MEMBER_ID
+
+
+6. 대여 기록이 존재하는 자동차 리스트 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/157341
+내가 쓴 답
+SELECT distinct(ch.CAR_ID) CAR_ID
+from CAR_RENTAL_COMPANY_RENTAL_HISTORY ch left join CAR_RENTAL_COMPANY_CAR cc on
+    ch.CAR_ID = cc.CAR_ID
+where CAR_TYPE = '세단' and date_format(START_DATE, "%m")
+order by CAR_ID desc
+
+
+7. 모든 레코드 조회하기 (프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/59034
+내가 쓴 답
+SELECT *
+from ANIMAL_INS
+order by ANIMAL_ID
+
+
+8. 즐겨찾기가 가장 많은 식당 정보 출력하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/131123
+내가 쓴 답
+select r2.FOOD_TYPE FOOD_TYPE, r2.REST_ID REST_ID, r2.REST_NAME REST_NAME, r2.FAVORITES FAVORITES
+from
+(SELECT FOOD_TYPE, max(FAVORITES) as FAVORITES
+FROM REST_INFO 
+GROUP BY FOOD_TYPE) r inner join REST_INFO r2 on r.FOOD_TYPE = r2.FOOD_TYPE and r.FAVORITES = r2.FAVORITES
+ORDER BY FOOD_TYPE DESC
+
+
+9. 식품분류별 가장 비싼 식품의 정보 조회하기
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/131116
+내가 쓴 답
+select pp.CATEGORY, p.MAX_PRICE, pp.PRODUCT_NAME
+from
+(SELECT CATEGORY, max(PRICE) as MAX_PRICE
+from FOOD_PRODUCT
+group by CATEGORY) p inner join FOOD_PRODUCT pp on p.CATEGORY = pp.CATEGORY and p.MAX_PRICE = pp.PRICE
+where p.CATEGORY in ('과자', '국', '김치', '식용유')
+order by p.MAX_PRICE desc
+
+
+10. 5월 식품들의 총매출 조회하기
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/131117
+내가 쓴 답
+SELECT fp.PRODUCT_ID, PRODUCT_NAME, (PRICE*sum(AMOUNT)) TOTAL_SALES
+from FOOD_ORDER fo left join FOOD_PRODUCT fp on fo.PRODUCT_ID = fp.PRODUCT_ID
+where date_format(PRODUCE_DATE, "%Y-%m") = '2022-05'
+group by fp.PRODUCT_ID
+order by TOTAL_SALES desc, fp.PRODUCT_ID
