@@ -1,0 +1,106 @@
+# 12.27 코딩테스트 문풀
+
+1. 없어진 기록 찾기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/59042
+내가 쓴 답
+select ao.ANIMAL_ID, ao.NAME
+from ANIMAL_INS ai right join ANIMAL_OUTS ao on ai.ANIMAL_ID = ao.ANIMAL_ID
+where ai.DATETIME is null
+order by ao.ANIMAL_ID
+
+
+2. 과일로 만든 아이스크림 고르기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/133025
+내가 쓴 답
+SELECT fh.FLAVOR
+from FIRST_HALF fh left join ICECREAM_INFO  ii on fh.FLAVOR = ii.FLAVOR
+where TOTAL_ORDER > 3000 and ii.INGREDIENT_TYPE = 'fruit_based'
+order by TOTAL_ORDER desc
+
+
+3. 재구매가 일어난 상품과 회원 리스트 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/131536
+내가 쓴 답
+SELECT USER_ID,PRODUCT_ID
+FROM ONLINE_SALE
+group by USER_ID, PRODUCT_ID
+having count(PRODUCT_ID)>=2
+order by USER_ID, PRODUCT_ID desc
+
+
+4. 최댓값 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/59415
+내가 쓴 답
+SELECT MAX(DATETIME) as '시간'
+FROM ANIMAL_INS
+
+
+5. 조건에 맞는 사용자 정보 조회하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/164670
+내가 쓴 답
+SELECT USER_ID, NICKNAME, concat(CITY," ",STREET_ADDRESS1," ",STREET_ADDRESS2) '전체주소', CONCAT(SUBSTR(TLNO,1,3),"-",SUBSTR(TLNO,4,4),"-",SUBSTR(TLNO,8,4)) '전화번호'
+from USED_GOODS_BOARD ub left join USED_GOODS_USER uu on ub.WRITER_ID = uu.USER_ID
+group by NICKNAME
+having count(*)>=3
+order by 1 desc
+
+
+6. 특정 옵션이 포함된 자동차 리스트 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/157343
+내가 쓴 답
+SELECT CAR_ID, CAR_TYPE, DAILY_FEE, OPTIONS
+from CAR_RENTAL_COMPANY_CAR
+where instr(OPTIONS,"네비게이션")>0
+order by CAR_ID desc
+
+
+7.조건에 부합하는 중고거래 상태 조회하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/164672
+내가 쓴 답
+SELECT BOARD_ID, WRITER_ID,	TITLE, PRICE, 
+       case when STATUS = "DONE" then "거래완료"
+            when STATUS = "SALE" then "판매중"
+            when STATUS = "RESERVED" then "예약중"
+            end STATUS
+from USED_GOODS_BOARD
+where date_format(CREATED_DATE,"%Y-%m-%d") = '2022-10-05'
+order by BOARD_ID desc
+
+
+8. 취소되지 않은 진료 예약 조회하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/132204
+내가 쓴 답
+SELECT APNT_NO,	PT_NAME, a.PT_NO, a.MCDP_CD, DR_NAME, APNT_YMD
+from APPOINTMENT a left join PATIENT p on a.PT_NO = p.PT_NO
+                   left join DOCTOR d on a.MDDR_ID = d.DR_ID
+where a.MCDP_CD = 'CS' and date_format(APNT_YMD,"%Y-%m-%d") = '2022-04-13' and APNT_CNCL_YN ='N'
+order by APNT_YMD
+
+
+9. 자동차 대여 기록에서 대여중 / 대여 가능 여부 구분하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/157340
+내가 쓴 답
+SELECT
+CAR_ID,
+CASE WHEN CAR_ID IN (
+    SELECT CAR_ID
+    FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+    WHERE START_DATE <= "2022-10-16" AND END_DATE >= "2022-10-16"
+    GROUP BY CAR_ID
+    ) THEN "대여중"
+    ELSE "대여 가능"
+    END AVAILABILITY
+FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+GROUP BY CAR_ID
+ORDER BY CAR_ID DESC;
+
+
+10. 년, 월, 성별 별 상품 구매 회원 수 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/131532
+내가 쓴 답
+SELECT YEAR(SALES_DATE) YEAR, MONTH(SALES_DATE) MONTH, GENDER, 
+       count(distinct(ui.USER_ID)) USERS
+from USER_INFO ui right join ONLINE_SALE os on ui.USER_ID = os.USER_ID
+where GENDER is not null
+group by 1,2,3
+order by 1,2,3
