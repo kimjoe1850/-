@@ -1,0 +1,76 @@
+# 12.28 코딩테스트 문풀
+
+1. 서울에 위치한 식당 목록 출력하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/131118
+내가 쓴 답
+SELECT rr.REST_ID,	REST_NAME,	FOOD_TYPE,	FAVORITES,	ADDRESS, round(avg(REVIEW_SCORE),2) SCORE
+from REST_REVIEW rr left join REST_INFO ri on rr.REST_ID = ri.REST_ID
+where substr(ADDRESS,1,2) = '서울'
+group by rr.REST_ID
+order by round(avg(REVIEW_SCORE),2) desc, FAVORITES desc
+
+
+2. 자동차 대여 기록에서 장기/단기 대여 구분하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/151138
+내가 쓴 답
+SELECT HISTORY_ID, CAR_ID, date_format(START_DATE,"%Y-%m-%d") START_DATE, date_format(END_DATE,"%Y-%m-%d") END_DATE, 
+       case when datediff(END_DATE,START_DATE)>=29 then "장기 대여"
+            else "단기 대여" end RENT_TYPE
+from CAR_RENTAL_COMPANY_RENTAL_HISTORY
+where year(START_DATE) = 2022 and month(START_DATE) = 9
+order by HISTORY_ID desc
+
+
+3. 자동차 평균 대여 기간 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/157342
+내가 쓴 답
+SELECT CAR_ID, round(avg(datediff(END_DATE, START_DATE)+1),1) AVERAGE_DURATION
+From CAR_RENTAL_COMPANY_RENTAL_HISTORY
+group by CAR_ID
+having round(avg(datediff(END_DATE, START_DATE)+1),1) >=7
+order by 2 desc, 1 desc
+(* 2,3번에서 대여 기간 구할 때 +1 꼭 할 것!!!)
+
+
+4. 헤비 유저가 소유한 장소(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/77487
+내가 쓴 답
+SELECT ID,NAME,p.HOST_ID
+from PLACES p left join (select HOST_ID, count(1) cnt
+                      from PLACES pp
+                      group by HOST_ID) pp on p.HOST_ID = pp.HOST_ID
+where pp.cnt >=2
+order by 1
+
+
+5. 우유와 요거트가 담긴 장바구니(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/62284
+내가 쓴 답
+select CART_ID
+from (SELECT CART_ID,group_concat(NAME) as NAME
+      From CART_PRODUCTS
+     group by CART_ID) cp2
+where NAME like "%Milk%" and NAME like "%Yogurt%"
+order by CART_ID
+(* 그룹별 문자를 잇고 싶을 때 group_concat(컬럼명))
+
+
+6. 조회수가 가장 많은 중고거래 게시판의 첨부파일 조회하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/62284
+내가 쓴 답
+SELECT CONCAT("/home/grep/src/", BOARD_ID, "/", FILE_ID, FILE_NAME, FILE_EXT) FILE_PATH
+FROM USED_GOODS_FILE
+WHERE BOARD_ID = (
+    SELECT BOARD_ID
+    FROM USED_GOODS_BOARD
+    ORDER BY VIEWS DESC
+    LIMIT 1
+)
+ORDER BY FILE_ID DESC;
+(최댓값에 해당하는 다른 컬럼의 값을 구하고 싶을 땐 whrere문 이용하기!!)
+
+
+### 오늘 배운 내용 요약
+1. 두 날짜 사이의 기간을 구할 떈 "(두 날짜의 차이) +1"
+2. 그룹별 숫자를 합할땐 group by sum / 그룹별 문자를 합칠 떈 group_concat(그룸 기준 컬럼명)
+3. 조회수가 가장 높은 게시물의 아이디를 구하고 싶을 땐 where문에 아이디 = (가장 높은 조회수의 아이디 서브쿼리)
