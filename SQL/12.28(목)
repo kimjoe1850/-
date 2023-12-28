@@ -56,7 +56,7 @@ order by CART_ID
 
 
 6. 조회수가 가장 많은 중고거래 게시판의 첨부파일 조회하기(프로그래머스)
-링크 : https://school.programmers.co.kr/learn/courses/30/lessons/62284
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/164671
 내가 쓴 답
 SELECT CONCAT("/home/grep/src/", BOARD_ID, "/", FILE_ID, FILE_NAME, FILE_EXT) FILE_PATH
 FROM USED_GOODS_FILE
@@ -70,7 +70,60 @@ ORDER BY FILE_ID DESC;
 (최댓값에 해당하는 다른 컬럼의 값을 구하고 싶을 땐 whrere문 이용하기!!)
 
 
+7.주문량이 많은 아이스크림들 조회하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/133027
+내가 쓴 답
+select fh.FLAVOR
+from(select FLAVOR, sum(TOTAL_ORDER) fir_tot
+    from FIRST_HALF
+    group by 1) fh join (select FLAVOR, sum(TOTAL_ORDER) jul_tot
+    from JULY
+    group by 1) j on fh.FLAVOR = j.FLAVOR
+order by j.jul_tot+ fh.fir_tot desc
+limit 3
+
+
+8. 저자 별 카테고리 별 매출액 집계하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/144856
+내가 쓴 답
+SELECT b.AUTHOR_ID,AUTHOR_NAME,CATEGORY,sum(b.PRICE * c.SALES) TOTAL_SALES
+from BOOK b left join AUTHOR a on b.AUTHOR_ID = a.AUTHOR_ID
+            left join BOOK_SALES c on b.BOOK_ID = c.BOOK_ID
+where year(SALES_DATE) = 2022 and month(SALES_DATE) = 1
+group by 1,3
+order by 1, 3 desc
+
+
+9. 대여 횟수가 많은 자동차들의 월별 대여 횟수 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/151139
+내가 쓴 답
+select month(START_DATE) MONTH, CAR_ID, count(HISTORY_ID) RECORDS
+from CAR_RENTAL_COMPANY_RENTAL_HISTORY
+where CAR_ID in (select CAR_ID
+from CAR_RENTAL_COMPANY_RENTAL_HISTORY
+where month(START_DATE) between 8 and 10
+group by CAR_ID
+having count(HISTORY_ID) >=5) and month(START_DATE) between 8 and 10
+group by 1,2
+having count(HISTORY_ID) >= 1
+order by 1,2 desc
+
+
+10. 그룹별 조건에 맞는 식당 목록 출력하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/131124
+내가 쓴 답
+select MEMBER_NAME, REVIEW_TEXT, date_format(REVIEW_DATE,"%Y-%m-%d") REVIEW_DATE
+from REST_REVIEW r join MEMBER_PROFILE p on r.MEMBER_ID = p.MEMBER_ID
+where r.MEMBER_ID = (SELECT MEMBER_ID
+                   from REST_REVIEW 
+                   group by MEMBER_ID
+                   order by count(MEMBER_ID) desc
+                   limit 1)
+order by 3,2
+
+
 ### 오늘 배운 내용 요약
 1. 두 날짜 사이의 기간을 구할 떈 "(두 날짜의 차이) +1"
 2. 그룹별 숫자를 합할땐 group by sum / 그룹별 문자를 합칠 떈 group_concat(그룸 기준 컬럼명)
 3. 조회수가 가장 높은 게시물의 아이디를 구하고 싶을 땐 where문에 아이디 = (가장 높은 조회수의 아이디 서브쿼리)
+
