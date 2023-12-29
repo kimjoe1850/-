@@ -1,0 +1,74 @@
+# 12.29 코딩테스트 문풀
+
+1. 오프라인/온라인 판매 데이터 통합하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/131537
+내가 쓴 답
+SELECT DATE_FORMAT(SALES_DATE,'%Y-%m-%d') AS SALES_DATE, PRODUCT_ID, USER_ID, SALES_AMOUNT
+FROM (
+    SELECT SALES_DATE, PRODUCT_ID, USER_ID, SALES_AMOUNT
+    FROM ONLINE_SALE
+    WHERE SALES_DATE BETWEEN date('2022-03-01') and date('2022-03-31')
+    UNION ALL
+    SELECT SALES_DATE, PRODUCT_ID, NULL AS USER_ID, SALES_AMOUNT
+    FROM OFFLINE_SALE
+    WHERE SALES_DATE BETWEEN date('2022-03-01') and date('2022-03-31'))a
+ORDER BY SALES_DATE, PRODUCT_ID, USER_ID
+
+
+2. 조건에 부합하는 중고거래 댓글 조회하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/164673
+내가 쓴 답
+SELECT 
+TITLE, 
+USED_GOODS_BOARD.BOARD_ID, 
+REPLY_ID, 
+USED_GOODS_REPLY.WRITER_ID, 
+USED_GOODS_REPLY.CONTENTS, 
+DATE_FORMAT(USED_GOODS_REPLY.CREATED_DATE, "%Y-%m-%d")
+FROM USED_GOODS_BOARD JOIN USED_GOODS_REPLY
+ON USED_GOODS_BOARD.BOARD_ID = USED_GOODS_REPLY.BOARD_ID
+WHERE USED_GOODS_BOARD.CREATED_DATE BETWEEN '2022-10-01' AND '2022-10-31'
+ORDER BY USED_GOODS_REPLY.CREATED_DATE, TITLE
+
+
+3. 입양 시각 구하기(2)(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/59413
+내가 쓴 답
+SET @HOUR = -1;
+SELECT (@HOUR := @HOUR +1) AS HOUR,
+    (SELECT COUNT(HOUR(DATETIME)) 
+    FROM ANIMAL_OUTS 
+    WHERE HOUR(DATETIME)=@HOUR) AS COUNT 
+    FROM ANIMAL_OUTS
+WHERE @HOUR < 23;
+(* set : = 프로시저에 변수나 파라미터에 값을 저장할때 사용 / SET @변수 = -1 , SELECT @변수 1:=필드 FROM [테이블 명])
+
+
+4. 특정 기간동안 대여 가능한 자동차들의 대여비용 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/157339
+내가 쓴 답
+select ch.car_id, cc.car_type,round(30*daily_fee*(1-0.01*DISCOUNT_RATE)) FEE
+from CAR_RENTAL_COMPANY_CAR cc left join CAR_RENTAL_COMPANY_RENTAL_HISTORY ch on ch.CAR_ID = cc.CAR_ID
+                               left join CAR_RENTAL_COMPANY_DISCOUNT_PLAN cd on cc.CAR_TYPE = cd.CAR_TYPE
+where cc.car_type in ('세단','SUV') and DURATION_TYPE like '%30일%'
+group by ch.car_id
+having max(end_date)<='2022-11-01'
+and fee between 500000 and 2000000
+order by 3 desc,2,1 desc
+
+
+5. 자동차 대여 기록 별 대여 금액 구하기(프로그래머스)
+링크 : https://school.programmers.co.kr/learn/courses/30/lessons/151141
+내가 쓴 답
+select HISTORY_ID, case when DISCOUNT_RATE is null then DURATION
+                        else round(DURATION * (1-0.01*DISCOUNT_RATE))
+                   end FEE
+from
+(SELECT HISTORY_ID, ch.CAR_ID, CAR_TYPE, (datediff(END_DATE, START_DATE)+1)*DAILY_FEE DURATION, 
+case when datediff(END_DATE, START_DATE)+1 >=90 then "90일 이상"
+     when datediff(END_DATE, START_DATE)+1 >=30 then "30일 이상"
+     when datediff(END_DATE, START_DATE)+1 >=7 then "7일 이상"
+     else '없음' end as DURATION_TYPE
+from CAR_RENTAL_COMPANY_RENTAL_HISTORY ch left join CAR_RENTAL_COMPANY_CAR cc on ch.CAR_ID = cc.CAR_ID
+where CAR_TYPE = '트럭') a left join CAR_RENTAL_COMPANY_DISCOUNT_PLAN b on a.CAR_TYPE = b.CAR_TYPE and a.DURATION_TYPE = b.DURATION_TYPE
+order by 2 desc, 1 desc
