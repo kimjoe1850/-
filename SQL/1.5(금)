@@ -1,0 +1,48 @@
+# 1.5 코딩테스트 문풀
+
+1. 620. Not Boring Movies(Leetcode)
+링크 : https://leetcode.com/problems/not-boring-movies/
+내가 쓴 답
+select *
+from Cinema
+where id%2 != 0 and description != 'boring'
+order by 4 desc
+
+
+2. 1251. Average Selling Price(Leetcode)
+링크 : https://leetcode.com/problems/average-selling-price/
+내가 쓴 답
+select p.product_id, IFNULL(round(sum(p.price*u.units)/sum(u.units),2),0) as average_price
+from Prices AS p LEFT JOIN UnitsSold as u 
+ON p.product_id=u.product_id AND u.purchase_date between p.start_date and p.end_date
+group by p.product_id
+
+
+3. 1075. Project Employees I(Leetcode)
+링크 : https://leetcode.com/problems/project-employees-i/description/
+내가 쓴 답
+select distinct p.project_id, round(avg(e.experience_years) over(partition by p.project_id),2)  average_years
+from Project p left join Employee e on p.employee_id = e.employee_id
+
+
+4. 1633. Percentage of Users Attended a Contest(Leetcode)
+링크 : https://leetcode.com/problems/percentage-of-users-attended-a-contest/
+내가 쓴 답
+select r.contest_id, round(count(1) / (select count(distinct uu.user_id) from Users uu)*100,2) percentage
+from Users u left join Register r on u.user_id = r.user_id
+where contest_id is not null
+group by 1
+order by 2 desc, 1
+
+
+5. 1211. Queries Quality and Percentage(Leetcode)
+링크 : https://leetcode.com/problems/queries-quality-and-percentage/
+내가 쓴 답
+select distinct a.query_name, a.quality, if(round(b.poor_query/a.counts*100,2) is null, 0,round(b.poor_query/a.counts*100,2)) poor_query_percentage
+from
+(select q.query_name, round(avg(q.rating/q.position),2) quality, count(query_name) counts
+from Queries q
+group by 1) a left join (select qq.query_name, count(qq.rating) over(partition by qq.query_name)poor_query
+                         from Queries qq
+                         where qq.rating <3) b on a.query_name = b.query_name
+where a.query_name is not null
