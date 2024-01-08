@@ -1,0 +1,21 @@
+# 1.8 코딩테스트 문풀
+
+1. 1193. Monthly Transactions I(Leetcode)
+링크 : https://leetcode.com/problems/monthly-transactions-i/
+내가 쓴 답
+select date_format(trans_date, '%Y-%m') month, country, count(1) trans_count, 
+       sum(if(state ='approved',1,0)) approved_count, sum(amount) trans_total_amount,
+       sum(if(state ='approved',1,0)*amount) approved_total_amount
+from Transactions
+group by 1,2
+
+
+2. 2356. Number of Unique Subjects Taught by Each Teacher(Leetcode)
+링크 : https://leetcode.com/problems/number-of-unique-subjects-taught-by-each-teacher/
+내가 쓴 답
+select teacher_id, count(distinct subject_id) cnt
+from Teacher
+group by 1
+
+
+
