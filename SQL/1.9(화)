@@ -1,0 +1,49 @@
+# 1.9 코딩테스트 문풀
+
+1. 596. Classes More Than 5 Students(Leetcode)
+링크 : https://leetcode.com/problems/classes-more-than-5-students/
+내가 쓴 답
+select class
+from Courses
+group by 1
+having count(student) >=5
+
+
+2. 1729. Find Followers Count(Leetcode)
+링크 : https://leetcode.com/problems/find-followers-count/
+내가 쓴 답
+select user_id, count(follower_id) followers_count
+from Followers
+group by 1
+order by 1
+
+
+3. 619. Biggest Single Number(Leetcode)
+링크 : https://leetcode.com/problems/biggest-single-number/
+내가 쓴 답
+select max(a.num) num
+from(
+select num , count(1) over(partition by num) counts
+from MyNumbers
+)a
+where a.counts = 1
+
+
+4. 1045. Customers Who Bought All Products(Leetcode)
+링크 : https://leetcode.com/problems/customers-who-bought-all-products/
+내가 쓴 답
+select customer_id
+from Customer
+group by 1
+having count(distinct product_key) = (select count(1) from Product)
+
+
+5. 1070. Product Sales Analysis III(Leetcode)
+링크 : https://leetcode.com/problems/product-sales-analysis-iii/
+내가 쓴 답
+select a.product_id, a.first_year, b.quantity, b.price
+from
+(select product_id, min(year) first_year
+from Sales
+group by 1)a , Sales b 
+where a.product_id is not null and a.first_year = b.year and a.product_id = b.product_id
