@@ -1,0 +1,59 @@
+# 1.10 코딩테스트 문풀
+
+1. 1789. Primary Department for Each Employee(Leetcode)
+링크 : https://leetcode.com/problems/primary-department-for-each-employee/
+내가 쓴 답
+SELECT employee_id, department_id
+FROM Employee 
+WHERE primary_flag = 'Y' 
+UNION 
+SELECT employee_id, department_id  
+FROM Employee 
+GROUP BY employee_id 
+HAVING COUNT(*) = 1
+
+
+2. 1731. The Number of Employees Which Report to Each Employee(Leetcode)
+링크 : https://leetcode.com/problems/the-number-of-employees-which-report-to-each-employee/
+내가 쓴 답
+select a.employee_id, b.name, a.reports_count, a.average_age
+from 
+(select reports_to employee_id, count(employee_id) reports_count, round(avg(age)) average_age
+from Employees
+where reports_to is not null
+group by 1
+order by 1) a left join Employees b on a.employee_id = b.employee_id
+
+
+3. 180. Consecutive Numbers(Leetcode)
+링크 : https://leetcode.com/problems/consecutive-numbers/
+내가 쓴 답
+with cnt as(
+    select num, 
+       lag(num,1) over() num2,
+       lag(num,2) over() num3
+    from Logs
+)
+
+select distinct num ConsecutiveNums
+from cnt
+where num = num2 and num2 = num3
+
+
+4. 1164. Product Price at a Given Date(Leetcode)
+링크 : https://leetcode.com/problems/product-price-at-a-given-date/
+내가 쓴 답
+select distinct b.product_id, if(a.new_price is null, 10, b.new_price) price
+from
+(select product_id, new_price, max(change_date) date2
+from Products
+where change_date <="2019-08-16"
+group by 1) a right join Products b on a.product_id = b.product_id
+where a.date2 = b.change_date or a.date2 is null
+
+
+5. 610. Triangle Judgement(Leetcode)
+링크 : https://leetcode.com/problems/triangle-judgement/
+내가 쓴 답
+select *, if(x+y > z and x+z>y and y+z>x, "Yes", "No") triangle
+from Triangle
