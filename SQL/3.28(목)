@@ -1,0 +1,95 @@
+# 3.28 코딩테스트 문풀
+
+1. Weather Observation Station 5(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-5/problem?isFullScreen=true
+내가 쓴 답
+(select city, length(city)
+from station
+where length(city) = (select min(length(city)) from station)
+order by city
+limit 1)
+union
+(select city, length(city)
+from station
+where length(city) = (select max(length(city)) from station)
+order by city
+limit 1)
+
+
+2. Weather Observation Station 6(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-6/problem?isFullScreen=true
+내가 쓴 답
+select distinct city
+from station
+where left(city,1) in ('a','e', 'i','o', 'u')
+order by city
+
+
+3. Weather Observation Station 7(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-7/problem?isFullScreen=true
+내가 쓴 답
+select distinct city
+from station
+where right(city,1) in ('a','e', 'i','o', 'u')
+order by city
+
+
+4. Weather Observation Station 8(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-8/problem?isFullScreen=true
+내가 쓴 답
+select distinct city
+from station
+where left(city,1) in ('a','e', 'i','o', 'u') and right(city,1) in ('a','e', 'i','o', 'u')
+order by city
+
+
+5. Weather Observation Station 9(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-9/problem?isFullScreen=true
+내가 쓴 답
+select distinct city
+from station
+where left(city,1) not in ('a','e', 'i','o', 'u') 
+order by city
+
+
+6. Weather Observation Station 10(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-10/problem?isFullScreen=true
+내가 쓴 답
+select distinct city
+from station
+where right(city,1) not in ('a','e', 'i','o', 'u') 
+order by city
+
+
+7. Weather Observation Station 11(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-11/problem?isFullScreen=true
+내가 쓴 답
+select distinct city
+from station
+where left(city,1) not in ('a','e', 'i','o', 'u') or right(city,1) not in ('a','e', 'i','o', 'u')
+order by city
+
+8. Weather Observation Station 12(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-12/problem?isFullScreen=true
+내가 쓴 답
+select distinct city
+from station
+where left(city,1) not in ('a','e', 'i','o', 'u') and right(city,1) not in ('a','e', 'i','o', 'u')
+order by city
+
+
+9. Higher Than 75 Marks(HackerRank)
+링크 : https://www.hackerrank.com/challenges/more-than-75-marks/problem?isFullScreen=true
+내가 쓴 답
+select name
+from students
+where marks > 75
+order by right(name,3), id
+
+
+10. Employee Names(HackerRank)
+링크 : https://www.hackerrank.com/challenges/name-of-employees/problem?isFullScreen=true
+내가 쓴 답
+select name
+from employee
+order by name
