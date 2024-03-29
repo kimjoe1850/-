@@ -79,3 +79,11 @@ from station
 where lat_n > 38.7780
 order by lat_n 
 limit 1
+
+
+11. Japan Population(HackerRank)
+링크 : https://www.hackerrank.com/challenges/japan-population/problem?isFullScreen=true
+내가 쓴 답
+select sum(population)
+from city
+where countrycode = 'JPN'
