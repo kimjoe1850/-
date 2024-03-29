@@ -1,0 +1,81 @@
+# 3.29 코딩테스트 문풀
+
+1. Employee Salaries(HackerRank)
+링크 : https://www.hackerrank.com/challenges/salary-of-employees/problem?isFullScreen=true
+내가 쓴 답
+select name 
+from employee 
+where salary > 2000 and months < 10 
+order by employee_id
+
+
+2. Average Population(HackerRank)
+링크 : https://www.hackerrank.com/challenges/average-population/problem?isFullScreen=true
+내가 쓴 답
+select round(avg(population),0) from city
+
+
+3. Population Density Difference(HackerRank)
+링크 : https://www.hackerrank.com/challenges/population-density-difference/problem?isFullScreen=true
+내가 쓴 답
+select max(population) - min(population) from city
+
+
+4. Revising Aggregations - Averages(HackerRank)
+링크 : https://www.hackerrank.com/challenges/revising-aggregations-the-average-function/problem?isFullScreen=true
+내가 쓴 답
+select avg(population)
+from city
+where district = 'California'
+
+
+5. Revising Aggregations - The Sum Function(HackerRank)
+링크 : https://www.hackerrank.com/challenges/revising-aggregations-sum/problem?isFullScreen=true
+내가 쓴 답
+select sum(population)
+from city
+where district = 'California'
+
+
+6. Revising Aggregations - The Count Function(HackerRank)
+링크 : https://www.hackerrank.com/challenges/revising-aggregations-the-count-function/problem?isFullScreen=true
+내가 쓴 답
+select count(name)
+from city
+where population > 100000
+
+
+7. Weather Observation Station 13(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-13/problem?isFullScreen=true
+내가 쓴 답
+select round(sum(lat_n),4)
+from station
+where lat_n between 38.7880 and 137.2345
+
+
+8. Weather Observation Station 14(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-14/problem?isFullScreen=true
+내가 쓴 답
+select round(max(lat_n),4)
+from station
+where lat_n < 137.2345
+
+
+9. Weather Observation Station 15(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-15/problem?isFullScreen=true
+내가 쓴 답
+select round(long_w,4)
+from station
+where lat_n < 137.2345
+order by lat_n desc
+limit 1
+
+
+10. Weather Observation Station 16(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-16/problem?isFullScreen=true
+내가 쓴 답
+select round(lat_n,4)
+from station
+where lat_n > 38.7780
+order by lat_n 
+limit 1
