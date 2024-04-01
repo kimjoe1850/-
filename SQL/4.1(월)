@@ -1,0 +1,43 @@
+# 4.1 코딩테스트 문풀
+
+1. Weather Observation Station 17(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-17/problem?isFullScreen=true
+내가 쓴 답
+SELECT ROUND(LONG_W, 4)
+FROM STATION
+WHERE LAT_N = (SELECT MIN(LAT_N)
+                FROM STATION
+                WHERE LAT_N > 38.7780)
+
+
+2. Population Census(HackerRank)
+링크 : https://www.hackerrank.com/challenges/asian-population/problem?isFullScreen=true
+내가 쓴 답
+select sum(c.population)
+from city c left join country cc on c.countrycode = cc.code
+where cc.continent = 'Asia'
+
+
+3. African Cities(HackerRank)
+링크 : https://www.hackerrank.com/challenges/african-cities/problem?isFullScreen=true
+내가 쓴 답
+select c.name
+from city c left join country cc on c.countrycode = cc.code
+where cc.continent = 'Africa'
+
+
+4. Average Population of Each Continent(HackerRank)
+링크 : https://www.hackerrank.com/challenges/average-population-of-each-continent/problem?isFullScreen=true
+내가 쓴 답
+select cc.continent, truncate(avg(c.population),0)
+from city c inner join country cc on c.countrycode = cc.code
+group by 1
+
+
+5. The Report - The Sum Function(HackerRank)
+링크 : https://www.hackerrank.com/challenges/the-report/problem?isFullScreen=true
+내가 쓴 답
+select CASE WHEN (SELECT Grade FROM Grades WHERE Marks BETWEEN Min_Mark AND Max_Mark) > 7 THEN Name end as Name,
+      (SELECT Grade FROM Grades WHERE Marks BETWEEN Min_Mark AND Max_Mark) AS Grade, Marks
+from students
+ORDER BY Grade DESC, Name, Marks
