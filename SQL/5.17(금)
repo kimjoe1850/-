@@ -1,0 +1,65 @@
+5.17(금) 코테 문제풀이
+
+1. 1978. Employees Whose Manager Left the Company(leetcode)
+링크 : https://leetcode.com/problems/employees-whose-manager-left-the-company/
+풀이
+select employee_id
+from Employees
+where salary < 30000 and manager_id not in (select employee_id from Employees)
+order by 1
+
+2. 626. Exchange Seats(leetcode)
+링크 : https://leetcode.com/problems/exchange-seats
+풀이
+SELECT S.id,
+       IFNULL(IF(S.id % 2 = 0,(SELECT student FROM Seat WHERE id = S.id - 1),(SELECT student FROM Seat WHERE id = S.id + 1)),
+              S.student) AS student
+FROM Seat S
+ORDER BY S.id;
+
+3. 1341. Movie Rating(leetcode)
+링크 : https://leetcode.com/problems/movie-rating/
+풀이
+(select u.name as results
+ from MovieRating mr, Users u
+ where mr.user_id = u.user_id
+ group by mr.user_id
+ order by count(1) desc, u.name
+ limit 1)
+union all
+(select m.title as results
+ from MovieRating mr, Movies m 
+ where mr.movie_id = m.movie_id and mr.created_at like '2020-02%'
+ group by mr.movie_id
+ order by avg(rating) desc, m.title
+ limit 1)
+
+4. 602. Friend Requests II: Who Has the Most Friends
+링크 : https://leetcode.com/problems/friend-requests-ii-who-has-the-most-friends/
+풀이
+with cte as (
+select requester_id as id, count(requester_id) as counts
+from RequestAccepted
+group by requester_id
+union all
+select accepter_id as id, count(accepter_id) as counts
+from RequestAccepted 
+group by accepter_id
+)
+
+select id, sum(counts) as num
+from cte
+group by id
+order by num desc
+limit 1;
+
+5. 185. Department Top Three Salaries
+링크 : https://leetcode.com/problems/department-top-three-salaries/
+풀이
+select Department, Employee, Salary
+from (
+    select d.name as Department, e.name as Employee, e.salary as Salary,
+           dense_rank() over (partition by d.name order by e.salary desc) as ranking
+    from Employee e left join Department d on e.departmentId = d.id
+) as ranked
+where ranking <= 3;
