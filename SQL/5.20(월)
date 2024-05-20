@@ -1,0 +1,42 @@
+5.20(월) 코테 문제풀이
+
+1. 1667. Fix Names in a Table(leetcode)
+링크 : https://leetcode.com/problems/fix-names-in-a-table/
+풀이
+select user_id, concat(upper(substr(name,1,1)),lower(substr(name,2))) name
+from Users
+order by 1
+
+
+2. 1527. Patients With a Condition(leetcode)
+링크 : https://leetcode.com/problems/patients-with-a-condition/
+풀이
+select patient_id, patient_name, conditions
+from patients
+where conditions regexp '\\bDIAB1'
+
+
+3. 196. Delete Duplicate Emails(leetcode)
+링크 : https://leetcode.com/problems/delete-duplicate-emails/
+풀이
+delete per
+from Person as per, Person as dup
+where per.id > dup.id and per.email = dup.email
+
+
+4. 176. Second Highest Salary(leetcode)
+링크 : https://leetcode.com/problems/second-highest-salary/
+풀이
+select max(salary) as SecondHighestSalary 
+from Employee
+where salary <>(select max(salary) from Employee);
+
+
+5. 1484. Group Sold Products By The Date(leetcode)
+링크 : https://leetcode.com/problems/group-sold-products-by-the-date/
+풀이
+select sell_date, 
+       count(distinct product) as num_sold,
+       group_concat(distinct product separator ',') as products
+from Activities
+group by 1
