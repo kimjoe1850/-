@@ -1,0 +1,53 @@
+5.21(화) 코테 문제풀이
+
+1. Type of Triangle(HackerRank)
+링크 : https://www.hackerrank.com/challenges/what-type-of-triangle/
+풀이
+select
+    case when A+B <= C or A+C <= B or B+C <= A then 'Not A Triangle'
+            when A = B and B = C and C = A then "Equilateral"
+            when A = B or B = C or C = A then "Isosceles"
+            when A != B and B != C and A != C then 'Scalene'
+    end as triangle
+from triangles
+
+
+2. The PADS(HackerRank)
+링크 : https://www.hackerrank.com/challenges/the-pads/
+풀이
+(select
+    case when Occupation = 'Doctor' then concat(Name,'(D)')
+            when Occupation = 'Actor' then concat(Name,'(A)')
+            when Occupation = 'Singer' then concat(Name,'(S)')
+            when Occupation = 'Professor' then concat(Name,'(P)')
+    end as Name
+from occupations)
+union all
+(select concat('There are a total of ', count(Occupation),concat(' ',lower(Occupation),'s.'))
+from occupations
+group by occupation)
+order by 1
+
+
+3. The Blunder(HackerRank)
+링크 : https://www.hackerrank.com/challenges/the-blunder/
+풀이
+select round(avg(salary)) - round(avg(replace(Salary, 0, '')))
+from employees
+
+
+4. Top Earners(HackerRank)
+링크 : https://www.hackerrank.com/challenges/earnings-of-employees/
+풀이
+select months*salary, count(months*salary) 
+from employee 
+group by 1 
+order by 1 desc 
+limit 1
+
+
+5. Weather Observation Station 18(HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-18/
+풀이
+select round(abs(max(LAT_N)-min(LAT_N)) + abs(max(LONG_W)-min(LONG_W)),4)
+from station
