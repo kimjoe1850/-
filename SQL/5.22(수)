@@ -1,0 +1,56 @@
+5.22(수) 코테 문풀
+
+1. Weather Observation Station 19 (HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-19/
+풀이
+select round(sqrt(power(max(Lat_N) - min(Lat_N),2) + power(max(Long_W) - min(Long_W),2)),4)
+from station
+
+
+2. Weather Observation Station 20 (HackerRank)
+링크 : https://www.hackerrank.com/challenges/weather-observation-station-20/
+풀이
+with station2 as(
+select LAT_N, ROW_NUMBER() OVER(ORDER BY LAT_N ASC) as 'id'
+from station)
+
+SELECT 
+    CASE WHEN COUNT(LAT_N) % 2 = 1 
+        THEN (SELECT ROUND(LAT_N, 4) FROM station2 where id >= (select floor(count(LAT_N)/2)+1 from station2) LIMIT 1)
+        ELSE (SELECT ROUND(AVG(LAT_N), 4) FROM station2 where id >= (select count(LAT_N)/2 from station2) LIMIT 2)
+    END AS median
+from station2
+
+
+3. Binary Tree Nodes (HackerRank)
+링크 : https://www.hackerrank.com/challenges/binary-search-tree-1/
+풀이
+select N,
+    case when P is null then 'Root'
+            when N not in (select distinct P from BST where P is not null) then 'Leaf' 
+            else 'Inner' end as output
+from BST
+order by N
+
+
+4. New Companies (HackerRank)
+링크 : https://www.hackerrank.com/challenges/the-company/
+풀이
+select e.company_code, c.founder, count(distinct lead_manager_code), count(distinct senior_manager_code), count(distinct manager_code), count(distinct employee_code)
+from employee as e left join company c on e.company_code = c.company_code
+group by 1,2
+order by 1
+
+
+5. Top Competitors (HackerRank)
+링크 : https://www.hackerrank.com/challenges/full-score/
+풀이
+select h.hacker_id, h.name
+from Hackers h
+         join Submissions s on s.hacker_id = h.hacker_id
+         join Challenges c on s.challenge_id = c.challenge_id 
+         join Difficulty d on d.difficulty_level = c.difficulty_level
+where d.score = s.score
+group by  hacker_id, name 
+having count(c.challenge_id)>1 
+order by count(c.challenge_id) desc, h.hacker_id;
