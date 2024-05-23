@@ -23,18 +23,42 @@ group by 1
 having sum(o.unit) >=100
 
 
-3. (HackerRank)
-링크 : 
+3. 1517. Find Users With Valid E-Mails (leetcode)
+링크 : https://leetcode.com/problems/find-users-with-valid-e-mails/
 풀이
+select *
+from Users
+where mail regexp '^[A-Za-z]+[a-zA-Z0-9\\.\\-\\_]*@leetcode\\.com$'
 
 
-
-4. (HackerRank)
-링크 : 
+4. 1321. Restaurant Growth (leetcode)
+링크 : https://leetcode.com/problems/restaurant-growth/
 풀이
+select a.visited_on, 
+       sum(b.sum_amt) as amount,
+       round(avg(b.sum_amt),2) as average_amount
+from 
+    (select visited_on, sum(amount) as sum_amt from Customer group by 1) as a,
+    (select visited_on, sum(amount) as sum_amt from Customer group by 1) as b
+where datediff(a.visited_on, b.visited_on) between 0 and 6
+group by 1
+having count(b.visited_on) = 7
 
 
-
-5. (HackerRank)
-링크 : https://www.hackerrank.com/challenges/full-score/
+5. Challenges (HackerRank)
+링크 : https://www.hackerrank.com/challenges/challenges/
 풀이
+with challenges as (
+    select c.hacker_id as hacker_id, h.name as name, count(c.challenge_id) as challenges_created
+    from Challenges c join Hackers h on c.hacker_id = h.hacker_id
+    group by 1,2
+    order by 3 desc, 1
+)
+
+select *
+from challenges
+where challenges_created = (select max(challenges_created) from challenges) 
+          or challenges_created in (select challenges_created
+                                                   from challenges
+                                                   group by 1
+                                                   having count(*) = 1)
