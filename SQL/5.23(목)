@@ -1,0 +1,40 @@
+5.23(목) 코테 문풀
+
+1. 585. Investments in 2016 (leetcode)
+링크 : https://leetcode.com/problems/investments-in-2016/
+풀이
+select round(sum(tiv_2016),2) as tiv_2016
+from Insurance i
+where tiv_2015 in (select tiv_2015 
+                   from Insurance ii 
+                   where i.pid != ii.pid)
+and (lat, lon) not in (select lat, lon
+                       from Insurance ii
+                       where i.pid != ii.pid)
+
+
+2. 1327. List the Products Ordered in a Period (leetcode)
+링크 : https://leetcode.com/problems/list-the-products-ordered-in-a-period/
+풀이
+select p.product_name as product_name, sum(o.unit) as unit
+from Orders o join Products p on o.product_id = p.product_id
+where date_format(order_date,'%Y-%m') = '2020-02'
+group by 1
+having sum(o.unit) >=100
+
+
+3. (HackerRank)
+링크 : 
+풀이
+
+
+
+4. (HackerRank)
+링크 : 
+풀이
+
+
+
+5. (HackerRank)
+링크 : https://www.hackerrank.com/challenges/full-score/
+풀이
