@@ -1,0 +1,61 @@
+5.24(금) 코테 문풀
+
+1. Placements(HackerRank)
+링크 : https://www.hackerrank.com/challenges/placements/
+풀이
+select name
+from students s left join friends f on s.id = f.id
+                         left join packages p on s.id = p.id
+                         left join packages pp on f.friend_id = pp.id
+where p.salary < pp.salary
+order by pp.salary
+
+
+2. Symmetric Pairs (HackerRank)
+링크 : https://www.hackerrank.com/challenges/symmetric-pairs/
+풀이
+(select a.X, a.Y
+from Functions a, Functions b
+where a.X = b.Y and a.Y = b.X 
+          and a.X != b.X and a.Y != b.Y
+          and a.X <a.Y)
+union all
+(select a.X, a.Y
+ from Functions a
+group by 1,2
+having count(*) > 1)
+order by 1
+
+
+3. Draw The Triangle 1 (HackerRank)
+링크 : https://www.hackerrank.com/challenges/draw-the-triangle-1/
+풀이
+with recursive stars as(
+    select 20 as n
+    union all
+    select n-1 from stars where n>0)
+select repeat('* ', n) from stars
+
+
+4. Draw The Triangle 2 (HackerRank)
+링크 : https://www.hackerrank.com/challenges/draw-the-triangle-2/
+풀이
+with recursive stars as(
+    select 1 as n
+    union all
+    select n+1 from stars where n<20)
+select repeat('* ', n) from stars
+
+
+5. Print Prime Numbers (HackerRank)
+링크 : https://www.hackerrank.com/challenges/print-prime-numbers/
+풀이
+with recursive prime as(
+    select 2 as n
+    union all
+    select n+1 from prime where n<1000)
+    
+select group_concat(n separator'&') from prime a
+where not exists(select b.n
+                          from prime b
+                          where  (a.n % b.n = 0) and (a.n != b.n))
